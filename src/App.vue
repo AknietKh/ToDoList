@@ -1,32 +1,88 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import "@/assets/style/reset.scss";
+
+@font-face {
+  font-family: "Gotham Pro";
+  src: url(assets/font/gotham_pro.ttf);
 }
 
-#nav {
-  padding: 30px;
+html {
+  font-size: 10px;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+#app {
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 2.4rem;
+  line-height: 2.9rem;
+  // letter-spacing: 0.09em;
+  color: rgba(29, 29, 29, 0.6);
+}
+
+.app-button {
+  width: 28.4rem;
+  height: 5.5rem;
+  border: 1px solid $btn-color;
+  border-radius: 2.4rem;
+  box-shadow: 0px 0.4rem 0.4rem rgba(0, 0, 0, 0.25);
+  background-color: $btn-color;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  letter-spacing: 0.09em;
+  color: #1D1D1D;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
   }
+
+  &:active {
+    filter: contrast(0.9);
+    opacity: 1;
+  }
+}
+
+.header-text {
+  font-family: $font-header;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 6.4rem;
+  line-height: 6.1rem;
+  // letter-spacing: -0.05em;
+  color: #1D1D1D;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  // height: 27.7rem;
+}
+
+:active, :hover, :focus {
+    outline: 0;
+    outline-offset: 0;
 }
 </style>
