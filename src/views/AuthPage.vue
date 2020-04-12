@@ -4,26 +4,72 @@
       <h1 class="header-text">Авторзация</h1>
       <form action="POST" class="form" @submit.prevent="onSubmit">
         <div class="form-wrapper">
-          <input type="text" placeholder="логин">
-          <input type="password" placeholder="пароль">
+          <div class="input-field">
+            <input
+            type="text"
+            placeholder="логин"
+            v-model.trim="name"
+            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+            >
+            <div
+              class="validation-message"
+              v-show="$v.name.$dirty && !$v.name.required">
+              Укажите логин
+            </div>
+          </div>
+          <div class="input-field">
+            <input
+              type="password"
+              placeholder="пароль"
+              v-model.trim="password"
+              :class="{invalid: $v.password.$dirty && !$v.password.required}"
+            >
+            <div
+              class="validation-message"
+              v-if="$v.password.$dirty && !$v.password.required">
+              Укажите пароль
+            </div>
+          </div>
 
           <div
-            class="invalid-data"
+            class="validation-message"
             v-if="isInvalid"
           >
-            <span>Неверный логин или пароль</span>
+            Неверный логин или пароль
           </div>
         </div>
 
-        <button class="app-button">Войти</button>
+        <button type="submit" class="app-button">Войти</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-// export default {
-// }
+import { required } from 'vuelidate/lib/validators'
+
+export default {
+  name: 'auth',
+  data: function () {
+    return {
+      name: '',
+      password: ''
+    }
+  },
+  validations: {
+    name: { required },
+    password: { required }
+  },
+  methods: {
+    onSubmit () {
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+      this.$router.push('/')
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -48,12 +94,19 @@
         flex-grow: 1;
       }
 
+      .input-field {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 8rem;
+        margin-bottom: 1rem;
+      }
+
       input {
         box-sizing: border-box;
         width: 28.4rem;
         height: 5.5rem;
         padding: 0 1.4rem;
-        margin-bottom: 2.7rem;
         font-family: Montserrat;
         font-style: normal;
         font-weight: normal;
