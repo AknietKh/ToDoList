@@ -66,7 +66,11 @@ export default {
         this.$v.$touch()
         return
       }
-      this.$router.push('/')
+
+      const { name, password } = this
+      this.$store.dispatch('login', { name, password })
+        .then(() => this.$router.push('/')) // будет вести на страницу таск-менеджера
+        .catch(err => console.log(err))
     }
   }
 }

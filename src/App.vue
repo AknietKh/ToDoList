@@ -4,6 +4,24 @@
   </div>
 </template>
 
+<script>
+import axios from 'axios'
+
+export default {
+  created: function () {
+    // Прочитать про это. Код отвечает за обработку просроченных токенов
+    axios.interceptors.response.use(undefined, function (err) {
+      return new Promise(function (resolve, reject) {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch('logout')
+        }
+        throw err
+      })
+    })
+  }
+}
+</script>
+
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 @import "@/assets/style/reset.scss";
