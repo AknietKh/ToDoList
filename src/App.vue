@@ -85,4 +85,22 @@ body {
     outline: 0;
     outline-offset: 0;
 }
+
+.invalid {
+    border: 2px solid #ff6f60;
+  }
+
+  .validation-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    border: 1px solid rgba(225, 100, 100, 0.5);;
+    border-radius: 1.2rem;
+    background-color: rgba(225, 100, 100, 0.5);;
+    font-size: 1.2rem;
+    line-height: 1.4rem;
+    color: #1D1D1D;
+    text-align: center;
+  }
 </style>
