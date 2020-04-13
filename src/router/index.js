@@ -1,29 +1,30 @@
 import Vue from 'vue'
 import store from '../store/index'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-// import TaskManager from '../views/TaskManager.vue'
+// import Home from '../views/Home.vue'
+import AuthPage from '../views/AuthPage.vue'
+import TaskManager from '../views/TaskManager.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: Home
+  // },
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/auth',
     name: 'AuthPage',
-    component: () => import('../views/AuthPage.vue')
+    component: AuthPage
   },
   {
     path: '/task-manager',
     name: 'task-manager',
-    component: () => import('../views/TaskManager.vue'),
-    meta: {
-      requiresAuth: true
-    }
+    component: TaskManager
+    // meta: {
+    //   requiresAuth: true
+    // }
   }
 ]
 
@@ -39,7 +40,7 @@ router.beforeEach((to, from, next) => {
       next()
       return
     }
-    next('/auth')
+    next('/')
   } else {
     next()
   }
