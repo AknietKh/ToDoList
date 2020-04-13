@@ -1,19 +1,19 @@
 <template>
   <div class="auth">
     <div class="main-content">
-      <h1 class="header-text">Авторзация</h1>
-      <form action="POST" class="form" @submit.prevent="onSubmit">
+      <h1 class="header-text">Авторизация</h1>
+      <form class="form" @submit.prevent="onSubmit">
         <div class="form-wrapper">
           <div class="input-field">
             <input
             type="text"
             placeholder="логин"
-            v-model.trim="name"
-            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+            v-model.trim="login"
+            :class="{invalid: $v.login.$dirty && !$v.login.required}"
             >
             <div
               class="validation-message"
-              v-show="$v.name.$dirty && !$v.name.required">
+              v-show="$v.login.$dirty && !$v.login.required">
               Укажите логин
             </div>
           </div>
@@ -29,13 +29,14 @@
               v-if="$v.password.$dirty && !$v.password.required">
               Укажите пароль
             </div>
-          </div>
 
-          <div
-            class="validation-message"
-            v-if="isInvalid"
-          >
-            Неверный логин или пароль
+            <div
+              class="validation-message"
+              v-if="errMessage"
+            >
+              {{errMessage}}
+              <!-- Неверный логин или пароль -->
+            </div>
           </div>
         </div>
 
@@ -52,12 +53,12 @@ export default {
   name: 'auth',
   data: function () {
     return {
-      name: '',
+      login: '',
       password: ''
     }
   },
   validations: {
-    name: { required },
+    login: { required },
     password: { required }
   },
   methods: {
@@ -67,10 +68,16 @@ export default {
         return
       }
 
-      const { name, password } = this
-      this.$store.dispatch('login', { name, password })
-        .then(() => this.$router.push('/')) // будет вести на страницу таск-менеджера
-        .catch(err => console.log(err))
+      // const { login, password } = this
+      // this.$store.dispatch('login', { login, password })
+      //   .then(() => this.$router.push('/task-manager'))
+      //   .catch(err => console.log(err))
+      this.$router.push('/task-manager')
+    }
+  },
+  computed: {
+    errMessage () {
+      return this.$store.getters.errMessage
     }
   }
 }

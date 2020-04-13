@@ -1,25 +1,29 @@
 import Axios from 'axios'
 
-const url = '' // ссылка на api
+const url = 'http://31.211.50.217/api/user-login' // ссылка на api
 
 // Здесь потом реализовать регистрацию админов
 const auth = {
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
-    user: {}
+    user: {},
+    errMessage: ''
   },
   mutations: {
     AUTH_REQUEST (state) {
       state.status = 'loading'
     },
-    AUTH_SUCCESS (state, token, user) {
+    AUTH_SUCCESS (state, { token, user }) {
+      // console.log(token);
       state.status = 'success'
       state.token = token
       state.user = user
     },
-    AUTH_ERROR (state) {
+    AUTH_ERROR (state, { errMessage }) {
+      console.log(errMessage)
       state.status = 'error'
+      state.errMessage = errMessage
     },
     logout (state) {
       state.status = ''
@@ -30,17 +34,22 @@ const auth = {
     login ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('AUTH_REQUEST')
-        Axios({ url, data: user, methods: 'POST' })
+        Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+        Axios({ url, data: user, method: 'POST' })
           .then(resp => {
-            const { token, user } = resp.data
-
+            console.log(resp.data.data)
+            const { token, user } = resp.data.data
+            
             localStorage.setItem('token', token)
             Axios.defaults.headers.common['Authorization'] = token
-            commit('AUTH_SUCCESS', token, user)
+            // console.log(token, user)
+            commit('AUTH_SUCCESS', { token, user })
             resolve(resp)
           })
           .catch(err => {
-            commit('AUTH_ERROR')
+            const errMessage = err.response.data.message
+            console.log(errMessage);
+            commit('AUTH_ERROR', {errMessage})
             localStorage.removeItem('token')
             reject(err)
           })
@@ -57,7 +66,8 @@ const auth = {
   },
   getters: {
     isLoggedIn: state => !!state.token,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    errMessage: state => state.errMessage
   }
 }
 
