@@ -4,11 +4,15 @@
     <!-- <div class="user-login">{{this.$store.state.user.name}}</div> -->
     <div class="header-wrapper">
       <div class="user-login">@login_user</div>
-      <button class="app-button app-button_small _btn-red">Выйти</button>
+      <button class="app-button app-button_small _btn-red"
+        @click='logout'
+      >
+        Выйти
+      </button>
     </div>
   </header>
   <div class="task-manager-content">
-    <div v-if='todos.length'>
+    <div class="todo-list" v-if='getTodos.length'>
       <TodoList/>
     </div>
     <div class="empty" v-else>
@@ -19,6 +23,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Empty from '../components/Empty'
 import TodoList from '../components/TodoList'
 
@@ -32,6 +37,22 @@ export default {
   components: {
     Empty,
     TodoList
+  },
+  // created: function () {
+  //   this.$store.dispatch('getTodos')
+  // },
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/')
+        })
+    }
+  },
+  computed: {
+    getTodos () {
+      return this.$store.getters.getTodos
+    }
   }
 }
 </script>
@@ -78,5 +99,15 @@ export default {
     align-items: center;
     background-color: $pink;
     cursor: pointer;
+  }
+
+  .todo-list {
+    width: 100%;
+    max-width: 119.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: $pink;
   }
 </style>
