@@ -29,14 +29,13 @@
               v-if="$v.password.$dirty && !$v.password.required">
               Укажите пароль
             </div>
-
-            <div
-              class="validation-message"
-              v-if="errMessage"
-            >
-              {{errMessage}}
-              <!-- Неверный логин или пароль -->
-            </div>
+          </div>
+          <div
+            class="validation-message"
+            v-if="errMessage"
+          >
+            {{errMessage}}
+            <!-- Неверный логин или пароль -->
           </div>
         </div>
 
@@ -68,11 +67,11 @@ export default {
         return
       }
 
-      // const { login, password } = this
-      // this.$store.dispatch('login', { login, password })
-      //   .then(() => this.$router.push('/task-manager'))
-      //   .catch(err => console.log(err))
-      this.$router.push('/task-manager')
+      const { login, password } = this
+      this.$store.dispatch('login', { login, password })
+        .then(() => this.$router.push('/task-manager'))
+        .catch(err => console.log(err))
+      // this.$router.push('/task-manager')
     }
   },
   computed: {
