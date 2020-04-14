@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-const url = 'http://31.211.50.217/api/user-login' // ссылка на api
+// const url = 'http://31.211.50.217/api/user-login' // ссылка на api
 
 // Здесь потом реализовать регистрацию админов
 const auth = {
@@ -21,7 +21,7 @@ const auth = {
       state.user = user
     },
     AUTH_ERROR (state, { errMessage }) {
-      console.log(errMessage)
+      // console.log(errMessage)
       state.status = 'error'
       state.errMessage = errMessage
     },
@@ -35,7 +35,7 @@ const auth = {
       return new Promise((resolve, reject) => {
         commit('AUTH_REQUEST')
         Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-        Axios({ url, data: user, method: 'POST' })
+        Axios({ url: 'http://31.211.50.217/api/user-login', data: user, method: 'POST' })
           .then(resp => {
             console.log(resp.data.data)
             const { token, user } = resp.data.data
@@ -59,6 +59,15 @@ const auth = {
       return new Promise((resolve, reject) => {
         commit('logout')
         localStorage.removeItem('token')
+        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        Axios.get('http://31.211.50.217/api/user-logout')
+          .then((resp) => {
+            console.log(resp.data)
+          })
+          .catch((err) => {
+            console.log(err.response)
+          })
+        
         delete Axios.defaults.headers.common['Authorization']
         resolve()
       })
