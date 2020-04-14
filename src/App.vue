@@ -5,20 +5,20 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
-  created: function () {
-    // Прочитать про это. Код отвечает за обработку просроченных токенов
-    axios.interceptors.response.use(undefined, function (err) {
-      return new Promise(function (resolve, reject) {
-        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch('logout')
-        }
-        throw err
-      })
-    })
-  }
+  // created: function () {
+  //   // Прочитать про это. Код отвечает за обработку просроченных токенов
+  //   axios.interceptors.response.use(undefined, function (err) {
+  //     return new Promise(function (resolve, reject) {
+  //       if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+  //         this.$store.dispatch('logout')
+  //       }
+  //       throw err
+  //     })
+  //   })
+  // }
 }
 </script>
 
@@ -57,10 +57,10 @@ body {
 .app-button {
   width: 28.4rem;
   height: 5.5rem;
-  border: 1px solid $btn-color;
+  border: 1px solid $btn-main-color;
   border-radius: 2.4rem;
   box-shadow: 0px 0.4rem 0.4rem rgba(0, 0, 0, 0.25);
-  background-color: $btn-color;
+  background-color: $btn-main-color;
   font-family: $font-main;
   font-style: normal;
   font-weight: normal;
@@ -70,14 +70,33 @@ body {
   color: #1D1D1D;
   cursor: pointer;
 
+  &_small {
+    width: 13.2rem;
+    font-size: 1.6rem;
+    line-height: 2rem;
+  }
+
   &:hover {
-    opacity: 0.9;
+    font-weight: 600;
+    box-shadow: none;
   }
 
   &:active {
-    filter: contrast(0.9);
-    opacity: 1;
+    // filter: contrast(0.9);
+    // opacity: 1;
+    font-weight: normal;
+    box-shadow: none;
   }
+}
+
+._btn-red {
+  border-color: $red;
+  background-color: $red;
+}
+
+._btn-green {
+  border-color: $green;
+  background-color: $green;
 }
 
 .header-text {
@@ -86,7 +105,7 @@ body {
   font-weight: 900;
   font-size: 6.4rem;
   line-height: 6.1rem;
-  // letter-spacing: -0.05em;
+  letter-spacing: -0.05em;
   color: #1D1D1D;
 }
 
@@ -120,5 +139,11 @@ body {
     line-height: 1.4rem;
     color: #1D1D1D;
     text-align: center;
+  }
+
+  @media only screen and (min-width: 1500px) {
+    html {
+      font-size: 8px;
+    }
   }
 </style>
