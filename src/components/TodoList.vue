@@ -3,8 +3,8 @@
     <div class="todo-list__header">
       <span>Список дел</span>
       <div class="filter-wrapper">
-        <button class="app-button button-add">+</button>
-        <select name="filter" class="filter">
+        <button class="app-button button-add" @click="onShowModal">+</button>
+        <select name="filter" class="filter" @change='onSelect'>
           <option value="Неисполненные" class="filter-item">Неисполненные</option>
           <option value="Исполненные" class="filter-item">Исполненные</option>
           <option value="Все" class="filter-item">Все</option>
@@ -18,21 +18,75 @@
         v-bind:todo="todo"
       />
     </div>
+    <AddTodoModal v-if='getModalType === "addTodo"' />
+    <AddSubTodoModal v-if='getModalType === "addSubTodo"'/>
+    <RedactTodoModal v-if='getModalType === "redactTodo"'/>
+    <RedactSubTodoModal v-if='getModalType === "redactSubTodo"'/>
+    <DeleteTaskModal v-if='getModalType === "deleteTask"'/>
   </div>
 </template>
 
 <script>
 import Todo from '../components/Todo.vue'
+import AddTodoModal from '../components/modals/addTodoModal.vue'
+import AddSubTodoModal from '../components/modals/addSubTodoModal.vue'
+import RedactTodoModal from '../components/modals/RedactTodoModal.vue'
+import RedactSubTodoModal from '../components/modals/RedactSubTodoModal.vue'
+import DeleteTaskModal from '../components/modals/DeleteTaskModal.vue'
 
 export default {
   name: 'TodoList',
+  data: function () {
+    return {
+      // showModal: false
+      // isAddTodo: false,
+      // isAddSubTodo: false
+    }
+  },
+  methods: {
+    onSelect (e) {
+      switch (e.target.value) {
+        case 'Неисполненные':
+          console.dir(e.target.value)
+          this.$store.dispatch('getNotCompletedTodos')
+          break
+        case 'Исполненные':
+          console.dir(e.target.value)
+          this.$store.dispatch('getCompletedTodos')
+          break
+        case 'Все':
+          console.dir(e.target.value)
+          this.$store.dispatch('getAllTodos')
+          break
+      }
+    },
+    onShowModal () {
+      // this.showModal = !this.showModal
+      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'addTodo' })
+    }
+  },
   computed: {
     getTodos () {
       return this.$store.getters.getTodos
+    },
+    getModalType () {
+      return this.$store.getters.modalType
+      // return modalType
+      // if (modalType === 'addTodo') {
+      //   this.isAddTodo = !this.isAddTodo
+      //   return this.isAddTodo
+      // } else if (modalType === 'addSubTodo') {
+      //   this.isAddSubTodo = !this.isAddSubTodo
+      // }
     }
   },
   components: {
-    Todo
+    Todo,
+    AddTodoModal,
+    AddSubTodoModal,
+    RedactTodoModal,
+    RedactSubTodoModal,
+    DeleteTaskModal
   }
 
 }
