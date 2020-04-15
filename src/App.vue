@@ -5,20 +5,23 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
-  // created: function () {
-  //   // Прочитать про это. Код отвечает за обработку просроченных токенов
-  //   axios.interceptors.response.use(undefined, function (err) {
-  //     return new Promise(function (resolve, reject) {
-  //       if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-  //         this.$store.dispatch('logout')
-  //       }
-  //       throw err
-  //     })
-  //   })
-  // }
+  created: function () {
+    // // Прочитать про это. Код отвечает за обработку просроченных токенов
+    // axios.interceptors.response.use(undefined, function (err) {
+    //   return new Promise(function (resolve, reject) {
+    //     console.log('check')
+    //     if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+    //       console.log('inside');
+    //       this.$store.dispatch('logout')
+    //     }
+    //     throw err
+    //   })
+    // })
+    this.$store.dispatch('login', {login: 'admin1', password: '123456'}) //пока так, нужно решить пробелму с перезагрузкой
+  }
 }
 </script>
 
@@ -124,22 +127,22 @@ body {
 }
 
 .invalid {
-    border: 2px solid #ff6f60;
-  }
+  border: 2px solid #ff6f60;
+}
 
-  .validation-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 2rem;
-    border: 1px solid rgba(225, 100, 100, 0.5);;
-    border-radius: 1.2rem;
-    background-color: rgba(225, 100, 100, 0.5);;
-    font-size: 1.2rem;
-    line-height: 1.4rem;
-    color: #1D1D1D;
-    text-align: center;
-  }
+.validation-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  border: 1px solid rgba(225, 100, 100, 0.5);;
+  border-radius: 1.2rem;
+  background-color: rgba(225, 100, 100, 0.5);;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #1D1D1D;
+  text-align: center;
+}
 
   @media only screen and (min-width: 1500px) {
     html {
