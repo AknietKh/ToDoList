@@ -14,8 +14,8 @@
     <div class="sub-todo__right-bar"> 
         <span class="sub-todo__text">{{subTodo.created_at}}</span>
         <div class="btn-wrapper">
-          <div class="todo-icon todo-redact"></div>
-          <div class="todo-icon">&times;</div>
+          <div class="todo-icon todo-redact" @click='onShowSubRedactTodoModal'></div>
+          <div class="todo-icon" @click="onShowDeleteTaskModal">&times;</div>
       </div>
     </div>
   </div>
@@ -24,7 +24,23 @@
 <script>
 export default {
   name: 'SubTodo',
-  props: ['subTodo']
+  props: ['subTodo', 'todo'],
+  methods: {
+    onShowSubRedactTodoModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'redactSubTodo' })
+    },
+    onShowDeleteTaskModal () {
+      const payload = {
+        type: 'deleteTask',
+        taskName: {
+          todoName: this.todo.name,
+          subTodoName: this.subTodo.name_list
+        },
+        task: this.subTodo
+      }
+      this.$store.commit('CHANGE_MODAL_TYPE', payload)
+    }
+  }
 }
 </script>
 

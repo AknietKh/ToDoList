@@ -8,6 +8,7 @@
       v-for='subTodo in subTodos'
       v-bind:key='subTodo.id'
       v-bind:subTodo='subTodo'
+      v-bind:todo="todo"
     />
     </div>
   </div>
@@ -18,7 +19,7 @@ import SubTodo from '../components/SubTodo'
 
 export default {
   name: 'SubTodoList',
-  props: ['subTodos'],
+  props: ['subTodos', 'todo'],
   components: {
     SubTodo
   }
