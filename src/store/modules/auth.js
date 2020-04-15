@@ -34,12 +34,11 @@ const auth = {
     login ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('AUTH_REQUEST')
-        Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+        Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8'
         Axios({ url: 'http://31.211.50.217/api/user-login', data: user, method: 'POST' })
           .then(resp => {
             console.log(resp.data.data)
             const { token, user } = resp.data.data
-            
             localStorage.setItem('token', token)
             Axios.defaults.headers.common['Authorization'] = token
             // console.log(token, user)
@@ -48,8 +47,8 @@ const auth = {
           })
           .catch(err => {
             const errMessage = err.response.data.message
-            console.log(errMessage);
-            commit('AUTH_ERROR', {errMessage})
+            console.log(errMessage)
+            commit('AUTH_ERROR', { errMessage })
             localStorage.removeItem('token')
             reject(err)
           })
@@ -58,17 +57,19 @@ const auth = {
     logout ({ commit }) {
       return new Promise((resolve, reject) => {
         commit('logout')
-        localStorage.removeItem('token')
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`        
         Axios.get('http://31.211.50.217/api/user-logout')
           .then((resp) => {
             console.log(resp.data)
+            localStorage.removeItem('token')
+            delete Axios.defaults.headers.common['Authorization']
           })
           .catch((err) => {
             console.log(err.response)
+            localStorage.removeItem('token')
+            delete Axios.defaults.headers.common['Authorization']
           })
-        
-        delete Axios.defaults.headers.common['Authorization']
+          
         resolve()
       })
     }
@@ -76,7 +77,8 @@ const auth = {
   getters: {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
-    errMessage: state => state.errMessage
+    errMessage: state => state.errMessage,
+    getUser: state => state.user
   }
 }
 
