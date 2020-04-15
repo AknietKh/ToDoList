@@ -27,8 +27,6 @@ export default {
       console.log(todoId);
 
       this.$store.commit('CHANGE_MODAL_TYPE', '')
-
-      this.$store.commit('CHANGE_MODAL_TYPE', '')
       axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       axios({
         method: 'post',
