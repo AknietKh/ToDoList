@@ -21,10 +21,10 @@ const routes = [
   {
     path: '/task-manager',
     name: 'task-manager',
-    component: TaskManager
-    // meta: {
-    //   requiresAuth: true
-    // }
+    component: TaskManager,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 
@@ -36,6 +36,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log(store.getters.isLoggedIn)
     if (store.getters.isLoggedIn) {
       next()
       return
