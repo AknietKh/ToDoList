@@ -32,14 +32,13 @@ export default {
         console.log('subTodo: ', task.id);
         console.log(task.task_list_id);
         this.$store.commit("CHANGE_MODAL_TYPE", '')
-        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
         axios({
           method: 'delete',
           url: `http://31.211.50.217/api/delete-list/${task.task_list_id}/item/${task.id}`
         })
           .then(resp => {
             console.log(resp.status);
-            // const todos = resp.data
           })
           .then( data => {
             this.$store.dispatch('getNotCompletedTodos')
@@ -51,14 +50,13 @@ export default {
       } else {
         console.log(task.id)
         this.$store.commit("CHANGE_MODAL_TYPE", '')
-        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
         axios({
           method: 'delete',
           url: `http://31.211.50.217/api/delete-list/${task.id}`
         })
           .then(resp => {
             console.log(resp);
-            // const todos = resp.data
           })
           .then( data => {
             this.$store.dispatch('getNotCompletedTodos')
