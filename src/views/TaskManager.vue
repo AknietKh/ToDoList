@@ -1,8 +1,7 @@
 <template>
   <div class="page">
     <header class="task-manager-header">
-    
-    <div class="header-wrapper">
+      <div class="header-wrapper">
       <!-- <div class="user-login">@login_user</div> -->
       <div class="user-login">{{getUser.login}}</div>
       <button class="app-button app-button_small _btn-red"
@@ -10,36 +9,42 @@
       >
         Выйти
       </button>
-    </div>
-  </header>
+      </div>
+    </header>
   <div class="task-manager-content">
     <div class="todo-list" v-if='getTodos.length'>
-      <TodoList/>
+      <TodoList v-on:alert-title='onShowAlert'/>
     </div>
     <div class="empty" v-else>
       <Empty/>
     </div>
   </div>
+  <Alert v-if='isShowAlert' v-bind:alertTitle='alertTitle'/>>
   </div>
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
+import axios from 'axios'
 import Empty from '../components/Empty'
 import TodoList from '../components/TodoList'
+import Alert from '../components/Alert'
 
 export default {
   name: 'task-manager',
   data: function () {
     return {
-      todos: []
+      todos: [],
+      isShowAlert: false,
+      alertTitle: ''
     }
   },
   components: {
     Empty,
-    TodoList
+    TodoList, 
+    Alert
   },
   created: function () {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     this.$store.dispatch('getNotCompletedTodos')
   },
   methods: {
@@ -48,6 +53,10 @@ export default {
         .then(() => {
           this.$router.push('/')
         })
+    },
+    onShowAlert (title) {
+      this.isShowAlert = !this.isShowAlert;
+      this.alertTitle = title
     }
   },
   computed: {

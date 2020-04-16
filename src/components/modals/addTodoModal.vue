@@ -26,7 +26,7 @@ export default {
   methods: {
     onCreateTodo () {
       this.$store.commit('CHANGE_MODAL_TYPE', '')
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       axios({
         method: 'post',
         url: `http://31.211.50.217/api/create-list`,
@@ -35,15 +35,19 @@ export default {
         }
       })
         .then(resp => {
-          console.log(resp.status);
-          // const todos = resp.data
+          console.log(resp.status)
         })
         .then(() => {
           this.$store.dispatch('getNotCompletedTodos')
         })
+        .then(() => {
+          const newTitle = `Задача ${this.name} успешно создана`
+          console.log(newTitle);
+          this.$emit('on-alert', newTitle)
+        })
         .catch(err => {
           const errMessage = err.response.data.message
-          console.log(errMessage);
+          console.log(errMessage)
         })  
     }
   }

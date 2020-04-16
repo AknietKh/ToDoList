@@ -5,7 +5,7 @@
       <div class="filter-wrapper">
         <button class="app-button button-add" @click="onShowModal">+</button>
         <select name="filter" class="filter" @change='onSelect'>
-          <option value="Неисполненные" class="filter-item">Неисполненные</option>
+          <option value="Неисполненные" class="filter-item" selected>Неисполненные</option>
           <option value="Исполненные" class="filter-item">Исполненные</option>
           <option value="Все" class="filter-item">Все</option>
         </select>
@@ -18,7 +18,7 @@
         v-bind:todo="todo"
       />
     </div>
-    <AddTodoModal v-if='getModalType === "addTodo"' />
+    <AddTodoModal v-if='getModalType === "addTodo"' v-on:on-alert='onAlert'/>
     <AddSubTodoModal v-if='getModalType === "addSubTodo"'/>
     <RedactTodoModal v-if='getModalType === "redactTodo"'/>
     <RedactSubTodoModal v-if='getModalType === "redactSubTodo"'/>
@@ -63,6 +63,10 @@ export default {
     onShowModal () {
       // this.showModal = !this.showModal
       this.$store.commit('CHANGE_MODAL_TYPE', { type: 'addTodo' })
+    },
+    onAlert: function (title) {
+      console.log('TodoList', title);
+      this.$emit('alert-title', title)
     }
   },
   computed: {
