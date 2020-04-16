@@ -8,7 +8,11 @@
         </label>
 
         <label class="modal-field_check">
-          <input type="checkbox" class="modal-field__checkbox">
+          <input 
+            type="checkbox"
+            class="modal-field__checkbox"
+            v-model='isChecked'
+          >
           <span>срочная задача</span>
         </label>
     </div>
@@ -25,16 +29,17 @@ export default {
   name: 'AddSubTodoModal',
   data: function () {
     return {
-      name: ''
+      name: '',
+      isChecked: false
     }
   },
   methods: {
     onCreateSubTodo () {
-      const todoId = this.$store.getters.getTask.todo.id;
-      console.log(todoId);
+      const task = this.$store.getters.getTask;
+      const todoId = task.todo.id
 
       this.$store.commit('CHANGE_MODAL_TYPE', '')
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       axios({
         method: 'post',
         url: `http://31.211.50.217/api/create-list/${todoId}/item`,
@@ -43,14 +48,34 @@ export default {
         }
       })
         .then(resp => {
-          console.log(resp);
-          // const todos = resp.data
+          console.log(resp)
+          return resp
+        })
+        .then(resp => {
+          //не оптимальное решение, вплане перерисовок списка задач.
+          if (this.isChecked) {
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+            axios({
+              method: 'post',
+              url: `http://31.211.50.217/api/urgency/${resp.data.data.id}`,
+              data: {
+                urgency: this.isChecked
+              }
+            })
+            .then(() => {
+              this.$store.dispatch('getNotCompletedTodos')
+            })
+            .catch(err => {
+              const errMessage = err.response.data.message
+              console.log(errMessage);
+            })
+          }
         })
         .then(() => {
           this.$store.dispatch('getNotCompletedTodos')
         })
         .catch(err => {
-          const errMessage = err.response.data.message
+          const errMessage = err.response
           console.log(errMessage);
         })
     }
