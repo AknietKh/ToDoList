@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'RedactSubTodoModal',
   data: function () {
@@ -23,11 +25,11 @@ export default {
   },
   methods: {
     onRedactSubTodo () {
-      const task = this.$store.getter.getTask
-      const subTodoId = task.task.id // надо чекунть, не уверен что правильно
+      const task = this.$store.getters.getTask
+      const subTodoId = task.subTodo.id
       this.$store.commit('CHANGE_MODAL_TYPE', '')
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       axios({
         method: 'post',
         url: `http://31.211.50.217/api/update-task`,
@@ -37,15 +39,14 @@ export default {
         }
       })
         .then(resp => {
-          console.log(resp);
-          // const todos = resp.data
+          console.log(resp)
         })
         .then(() => {
           this.$store.dispatch('getNotCompletedTodos')
         })
         .catch(err => {
           const errMessage = err.response.data.message
-          console.log(errMessage);
+          console.log(errMessage)
         })
     }
   }
