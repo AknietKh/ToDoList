@@ -1,13 +1,15 @@
 <template>
-  <div class="delete-modal">
-    <div class="delete-modal__text">
-      <span v-if='taskName.subTodoName'>Вы действительно хотите удалить “{{taskName.subTodoName}}" из задачи “{{taskName.todoName}}”?</span>
-      <span v-else>Вы точно хотите удалить "{{taskName.todoName}}" ?</span>
-      <div class="delete-modal__close" @click='onCloseModal'>&times;</div>
-    </div>
-    <div class="delete-modal__btns">
-      <button class="app-button app-button_small _btn-green" @click="onDelete" >Да</button>
-      <button class="app-button app-button_small _btn-red" @click="onCancel">Нет</button>  
+  <div class="modal-wrapper">
+    <div class="delete-modal">
+      <div class="delete-modal__text">
+        <span v-if='taskName.subTodoName'>Вы действительно хотите удалить “{{taskName.subTodoName}}" из задачи “{{taskName.todoName}}”?</span>
+        <span v-else>Вы точно хотите удалить "{{taskName.todoName}}" ?</span>
+        <div class="delete-modal__close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="delete-modal__btns">
+        <button class="app-button app-button_small _btn-green" @click="onDelete" >Да</button>
+        <button class="app-button app-button_small _btn-red" @click="onCancel">Нет</button>  
+      </div>
     </div>
   </div>
 </template>

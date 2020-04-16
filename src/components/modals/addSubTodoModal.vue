@@ -1,10 +1,11 @@
 <template>
-  <div class="modal">
-    <div class="modal__header">
-      Новая подзадача
-      <div class="modal-close" @click='onCloseModal'>&times;</div>
-    </div>
-    <div class="modal__main">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        Новая подзадача
+        <div class="modal-close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="modal__main">
         <label class='modal-field'>
           <span>Название подзадачи:</span>
           <input 
@@ -33,9 +34,10 @@
           >
           <span>срочная задача</span>
         </label>
-    </div>
-    <div class="modal__footer">
-      <button class="app-button" @click='onCreateSubTodo'>Создать</button>
+      </div>
+      <div class="modal__footer">
+        <button class="app-button" @click='onCreateSubTodo'>Создать</button>
+      </div>
     </div>
   </div>
 </template>

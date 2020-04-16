@@ -1,11 +1,11 @@
 <template>
-  <div class="modal">
-    
-    <div class="modal__header">
-      Новая задача
-      <div class="modal-close" @click='onCloseModal'>&times;</div>
-    </div>
-    <div class="modal__main">
+  <div class="modal-wrapper">
+    <div class="modal"> 
+      <div class="modal__header">
+        Новая задача
+        <div class="modal-close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="modal__main">
         <label class='modal-field'>
           <span>Название задачи:</span>
           <input 
@@ -25,9 +25,10 @@
             Количество символов должно быть не более 255
           </div>
         </label>
-    </div>
-    <div class="modal__footer">
-      <button class="app-button" @click='onCreateTodo'>Создать</button>
+      </div>
+      <div class="modal__footer">
+        <button class="app-button" @click='onCreateTodo'>Создать</button>
+      </div>
     </div>
   </div>
 </template>
@@ -93,12 +94,24 @@ export default {
 
 <style lang="scss">
   .modal {
+    &-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba($color: #000000, $alpha: 0.2);
+    }
+
     box-sizing: border-box;
     width: 70.6rem;
     height: 51rem;
-    position: absolute;
-    top: 30%;
-    left: 32%;
+    // position: absolute;
+    // top: 30%;
+    // left: 32%;
     display: flex;
     flex-direction: column;
     padding: 2.7rem 5rem 6.8rem;

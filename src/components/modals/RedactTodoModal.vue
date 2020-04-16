@@ -1,10 +1,11 @@
 <template>
-  <div class="modal">
-    <div class="modal__header">
-      Изменить название задачи
-      <div class="modal-close" @click='onCloseModal'>&times;</div>
-    </div>
-    <div class="modal__main">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        Изменить название задачи
+        <div class="modal-close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="modal__main">
         <label class='modal-field'>
           <span>Новое название:</span>
           <input 
@@ -24,9 +25,10 @@
             Количество символов должно быть не более 255
           </div>
         </label>
-    </div>
-    <div class="modal__footer">
-      <button class="app-button" @click='onRedactTodo'>Сохранить</button>
+      </div>
+      <div class="modal__footer">
+        <button class="app-button" @click='onRedactTodo'>Сохранить</button>
+      </div>
     </div>
   </div>
 </template>
