@@ -12,7 +12,9 @@ Vue.use(Vuelidate)
 const token = localStorage.getItem('token')
 
 if (token) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  console.log('yes')
+//axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
   console.log(axios.defaults.headers.common['Authorization'])
 }
 
