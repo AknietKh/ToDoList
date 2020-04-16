@@ -4,7 +4,22 @@
     <div class="modal__main">
         <label class='modal-field'>
           <span>Новое название:</span>
-          <input type="text" class="modal-field__input" v-model='name'>
+          <input 
+            type="text"
+            class="modal-field__input"
+            v-model.trim='name'
+            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+          >
+          <div
+            class="validation-message validation-message_modal "
+            v-if="$v.name.$dirty && !$v.name.required">
+            Заполните поле "Название задачи"
+          </div>
+          <div
+            class="validation-message validation-message_modal"
+            v-else-if="$v.name.$dirty && !$v.name.maxLength">
+            Количество символов должно быть не более 255
+          </div>
         </label>
     </div>
     <div class="modal__footer">
@@ -15,6 +30,7 @@
 
 <script>
 import axios from 'axios'
+import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'RedactTodoModal',
@@ -23,16 +39,26 @@ export default {
       name: ''
     }
   },
+   validations: {
+    name: { 
+      required,
+      maxLength: maxLength(255)
+    }
+  },
   methods: {
     onRedactTodo () {
-      const task = this.$store.getters.getTask;
-      const todoId = task.todo.id
-      console.log(task)
-      console.log(todoId);
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+      // const task = this.$store.getters.getTask;
+      // const todoId = task.todo.id
+      // console.log(task)
+      // console.log(todoId);
 
       this.$store.commit('CHANGE_MODAL_TYPE', '')
       // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-      axios({
+      /*axios({
         method: 'post',
         url: `http://31.211.50.217/api/update-list/${todoId}`,
         data: {
@@ -56,7 +82,7 @@ export default {
         .catch(err => {
           const errMessage = err.response.data.message
           console.log(errMessage);
-        })
+        }) */
     }
   }
 }
