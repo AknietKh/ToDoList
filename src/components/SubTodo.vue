@@ -1,14 +1,15 @@
 <template>
   <div class="sub-todo">
     <div class="sub-todo__main">
-        <div class="sub-todo__name">
+        <label class="sub-todo__name">
           <input
             type="checkbox"
             class="sub-todo__checkbox"
-            v-bind:checked='subTodo.status'
+            v-model='isChecked'
+            @change="onChangeStatus"
           >
           <span class="sub-todo__text">{{subTodo.name_list}}</span>
-        </div>
+        </label>
         <div class="sub-todo__urgency" v-if='subTodo.urgency'></div>
     </div>
     <div class="sub-todo__right-bar"> 
@@ -22,12 +23,19 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'SubTodo',
+  data: function () {
+    return {
+      isChecked: this.subTodo.status
+    }
+  },
   props: ['subTodo', 'todo'],
   methods: {
     onShowSubRedactTodoModal () {
-      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'redactSubTodo' })
+      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'redactSubTodo', task: { subTodo: this.subTodo} })
     },
     onShowDeleteTaskModal () {
       const payload = {
@@ -39,6 +47,29 @@ export default {
         task: this.subTodo
       }
       this.$store.commit('CHANGE_MODAL_TYPE', payload)
+    },
+    onChangeStatus () {
+      console.log(this.isChecked);
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+      axios({
+        method: 'post',
+        url: `http://31.211.50.217/api/mark-done/${this.subTodo.id}`,
+        data: {
+          status: this.isChecked
+        }
+      })
+        .then(resp => {
+          console.log(resp);
+          return resp
+        })
+        .then((resp) => {
+          this.$store.dispatch('getNotCompletedTodos')
+          return resp
+        })
+        .catch(err => {
+          const errMessage = err.response
+          console.log(errMessage);
+        })
     }
   }
 }
