@@ -1,6 +1,9 @@
 <template>
   <div class="modal">
-    <div class="modal__header">Изменить название задачи</div>
+    <div class="modal__header">
+      Изменить название задачи
+      <div class="modal-close" @click='onCloseModal'>&times;</div>
+    </div>
     <div class="modal__main">
         <label class='modal-field'>
           <span>Новое название:</span>
@@ -46,6 +49,9 @@ export default {
     }
   },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onRedactTodo () {
       if (this.$v.$invalid) {
         this.$v.$touch()

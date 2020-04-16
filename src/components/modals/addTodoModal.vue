@@ -1,6 +1,10 @@
 <template>
   <div class="modal">
-    <div class="modal__header">Новая задача</div>
+    
+    <div class="modal__header">
+      Новая задача
+      <div class="modal-close" @click='onCloseModal'>&times;</div>
+    </div>
     <div class="modal__main">
         <label class='modal-field'>
           <span>Название задачи:</span>
@@ -36,7 +40,7 @@ export default {
   name: 'AddTodoModal',
   data: function () {
     return {
-      name: ''
+      name: '',
     }
   },
   validations: {
@@ -46,6 +50,9 @@ export default {
     }
   },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onCreateTodo () {
       if (this.$v.$invalid) {
         this.$v.$touch()
@@ -107,11 +114,20 @@ export default {
     color: #000000;
 
     &__header {
+      position: relative;
       font-weight: 500;
       font-size: 2.4rem;
       line-height: 2.9rem;
       text-align: center;
       margin-bottom: 8.3rem;
+    }
+
+    &-close {
+      position: absolute;
+      top: -1.5rem;
+      right: -3rem;
+      font-size: 4rem;
+      cursor: pointer;
     }
 
     &__main {

@@ -1,6 +1,9 @@
 <template>
   <div class="modal">
-    <div class="modal__header">Новая подзадача</div>
+    <div class="modal__header">
+      Новая подзадача
+      <div class="modal-close" @click='onCloseModal'>&times;</div>
+    </div>
     <div class="modal__main">
         <label class='modal-field'>
           <span>Название подзадачи:</span>
@@ -56,12 +59,15 @@ export default {
     }
   },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onCreateSubTodo () {
       if (this.$v.$invalid) {
         this.$v.$touch()
         return
       }
-      
+
       // const task = this.$store.getters.getTask;
       // const todoId = task.todo.id
 

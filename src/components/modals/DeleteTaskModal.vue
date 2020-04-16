@@ -3,6 +3,7 @@
     <div class="delete-modal__text">
       <span v-if='taskName.subTodoName'>Вы действительно хотите удалить “{{taskName.subTodoName}}" из задачи “{{taskName.todoName}}”?</span>
       <span v-else>Вы точно хотите удалить "{{taskName.todoName}}" ?</span>
+      <div class="delete-modal__close" @click='onCloseModal'>&times;</div>
     </div>
     <div class="delete-modal__btns">
       <button class="app-button app-button_small _btn-green" @click="onDelete" >Да</button>
@@ -25,6 +26,9 @@ export default {
     }
   },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onDelete() {
       const task = this.$store.getters.getTask
       // console.log('task: ', task)
@@ -117,6 +121,18 @@ export default {
     text-align: center;
     letter-spacing: 0.09em;
     color: #000000;
+
+    &__text {
+      position: relative;
+    }
+
+    &__close {
+      position: absolute;
+      top: -4rem;
+      right: -3rem;
+      font-size: 4rem;
+      cursor: pointer;
+    }
 
     &__btns {
       display: flex;
