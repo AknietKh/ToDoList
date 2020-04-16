@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from './modules/auth'
 import todos from './modules/todos'
 import modal from './modules/modal'
+import alert from './modules/alert'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ export default new Vuex.Store({
   modules: {
     auth,
     todos,
-    modal
+    modal,
+    alert
   },
   strict: debug
 })

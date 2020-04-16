@@ -74,6 +74,14 @@ export default {
         .then(() => {
           this.$store.dispatch('getNotCompletedTodos')
         })
+        .then(function () {
+          const alert = {
+            id: Date.now(),
+            status: true,
+            text: `Подзадача "${this.name}" успешно добавлена в задачу "${task.todo.name}"`
+          }
+          this.$store.commit('ADD_ALERT', alert)
+        })
         .catch(err => {
           const errMessage = err.response
           console.log(errMessage);

@@ -13,13 +13,17 @@
     </header>
   <div class="task-manager-content">
     <div class="todo-list" v-if='getTodos.length'>
-      <TodoList v-on:alert-title='onShowAlert'/>
+      <TodoList/>
     </div>
     <div class="empty" v-else>
       <Empty/>
     </div>
   </div>
-  <Alert v-if='isShowAlert' v-bind:alertTitle='alertTitle'/>>
+  <Alert 
+    v-for='alert in getAlerts'
+    v-bind:key='alert.id'
+    v-bind:alert="alert"
+  />
   </div>
 </template>
 
@@ -33,9 +37,7 @@ export default {
   name: 'task-manager',
   data: function () {
     return {
-      todos: [],
-      isShowAlert: false,
-      alertTitle: ''
+      todos: []
     }
   },
   components: {
@@ -54,10 +56,10 @@ export default {
           this.$router.push('/')
         })
     },
-    onShowAlert (title) {
-      this.isShowAlert = !this.isShowAlert;
-      this.alertTitle = title
-    }
+    // onShowAlert (title) {
+    //   this.isShowAlert = !this.isShowAlert;
+    //   this.alertTitle = title
+    // }
   },
   computed: {
     getTodos () {
@@ -65,6 +67,9 @@ export default {
     },
     getUser () {
       return this.$store.getters.getUser
+    },
+    getAlerts () {
+      return this.$store.getters.getAlerts
     }
   }
 }

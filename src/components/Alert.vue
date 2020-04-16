@@ -1,13 +1,16 @@
 <template>
-  <div class="app-alert">
-    <span>{{alertText}}</span>
+  <div class="app-alert" v-if='alert.status'>
+    <span>{{alert.text}}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Alert',
-  prop: ['alertTitle']
+  prop: ['alert'],
+  mounted: function () {
+    this.$store.dispatch('dismissed', alert)
+  }
 }
 </script>
 

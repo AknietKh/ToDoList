@@ -18,7 +18,7 @@
         v-bind:todo="todo"
       />
     </div>
-    <AddTodoModal v-if='getModalType === "addTodo"' v-on:on-alert='onAlert'/>
+    <AddTodoModal v-if='getModalType === "addTodo"'/>
     <AddSubTodoModal v-if='getModalType === "addSubTodo"'/>
     <RedactTodoModal v-if='getModalType === "redactTodo"'/>
     <RedactSubTodoModal v-if='getModalType === "redactSubTodo"'/>
@@ -36,13 +36,6 @@ import DeleteTaskModal from '../components/modals/DeleteTaskModal.vue'
 
 export default {
   name: 'TodoList',
-  data: function () {
-    return {
-      // showModal: false
-      // isAddTodo: false,
-      // isAddSubTodo: false
-    }
-  },
   methods: {
     onSelect (e) {
       switch (e.target.value) {
@@ -61,12 +54,7 @@ export default {
       }
     },
     onShowModal () {
-      // this.showModal = !this.showModal
       this.$store.commit('CHANGE_MODAL_TYPE', { type: 'addTodo' })
-    },
-    onAlert: function (title) {
-      console.log('TodoList', title);
-      this.$emit('alert-title', title)
     }
   },
   computed: {
@@ -75,13 +63,6 @@ export default {
     },
     getModalType () {
       return this.$store.getters.modalType
-      // return modalType
-      // if (modalType === 'addTodo') {
-      //   this.isAddTodo = !this.isAddTodo
-      //   return this.isAddTodo
-      // } else if (modalType === 'addSubTodo') {
-      //   this.isAddSubTodo = !this.isAddSubTodo
-      // }
     }
   },
   components: {

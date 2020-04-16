@@ -43,6 +43,14 @@ export default {
           .then( data => {
             this.$store.dispatch('getNotCompletedTodos')
           })
+          .then(function () {
+            const alert = {
+              id: Date.now(),
+              status: true,
+              text: `Подзадача "${taskName().subTodoName}" из "${taskName().todoName}" успешно удалена`
+            }
+            this.$store.commit('ADD_ALERT', alert)
+          })
           .catch(err => {
             const errMessage = err.response.data.message
             console.log(errMessage);
@@ -60,6 +68,14 @@ export default {
           })
           .then( data => {
             this.$store.dispatch('getNotCompletedTodos')
+          })
+          .then(function () {
+            const alert = {
+              id: Date.now(),
+              status: true,
+              text: `Задача "${taskName().todoName}" успешно удалена`
+            }
+            this.$store.commit('ADD_ALERT', alert)
           })
           .catch(err => {
             const errMessage = err.response.data.message
