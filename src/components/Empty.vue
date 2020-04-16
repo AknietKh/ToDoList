@@ -1,9 +1,31 @@
 <template>
   <div class="empty-wrapper">
     <div class="empty-text">Задачи отсутсвуют. Нажмите, чтобы добавить...</div>
-    <div class="empty-plus">+</div>
+    <div class="empty-plus" @click='onShowAddTodoModal'>+</div>
+    <AddTodoModal v-if='isShowModal' />
   </div>
 </template>
+
+<script>
+import AddTodoModal from './modals/addTodoModal'
+
+export default {
+  name: 'Empty',
+  data: function () {
+    return {
+      isShowModal: false
+    }
+  },
+  components: {
+    AddTodoModal
+  },
+  methods: {
+    onShowAddTodoModal () {
+      this.isShowModal = true
+    }
+  }
+}
+</script>
 
 <style lang="scss">
  .empty {
