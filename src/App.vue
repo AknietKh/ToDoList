@@ -9,7 +9,7 @@ import axios from 'axios'
 
 export default {
   created: function () {
-    // // Прочитать про это. Код отвечает за обработку просроченных токенов
+    // // Код отвечает за обработку просроченных токенов
     // axios.interceptors.response.use(undefined, function (err) {
     //   return new Promise(function (resolve, reject) {
     //     console.log('check')
@@ -20,7 +20,6 @@ export default {
     //     throw err
     //   })
     // })
-    this.$store.dispatch('login', {login: 'admin1', password: '123456'}) //пока так, нужно решить пробелму с перезагрузкой
   }
 }
 </script>
