@@ -7,7 +7,6 @@ const url = 'http://31.211.50.217/api' // ссылка на api
 const auth = {
   state: {
     status: '',
-    // token: localStorage.getItem('token') || '',
     todos: []
   },
   mutations: {
@@ -28,7 +27,7 @@ const auth = {
     getAllTodos ({ commit }) {
       return new Promise((resolve, reject) => {
         commit('TODOS_REQUEST')
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        // Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
         Axios.get(`${url}/show-list/?status_list=all`)
           .then(resp => {
             // console.log(resp.data.data)
@@ -47,7 +46,7 @@ const auth = {
     getNotCompletedTodos ({ commit }) {
       return new Promise ((resolve, reject) => {
         commit('TODOS_REQUEST')
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        // Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
         Axios.get(`${url}/show-list`)
           .then(resp => {
             // console.log(resp.data.data)
@@ -66,7 +65,7 @@ const auth = {
     getCompletedTodos ({ commit }) {
       return new Promise ((resolve, reject) => {
         commit('TODOS_REQUEST')
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+        // Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
         Axios.get(`${url}/show-list/?status_list=true`)
           .then(resp => {
             // console.log(resp.data.data)

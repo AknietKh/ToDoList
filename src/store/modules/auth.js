@@ -40,7 +40,7 @@ const auth = {
             console.log(resp.data.data)
             const { token, user } = resp.data.data
             localStorage.setItem('token', token)
-            Axios.defaults.headers.common['Authorization'] = token
+            // Axios.defaults.headers.common['Authorization'] = token
             // console.log(token, user)
             commit('AUTH_SUCCESS', { token, user })
             resolve(resp)
@@ -57,7 +57,7 @@ const auth = {
     logout ({ commit }) {
       return new Promise((resolve, reject) => {
         commit('logout')
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`        
+        // Axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
         Axios.get('http://31.211.50.217/api/user-logout')
           .then((resp) => {
             console.log(resp.data)
@@ -68,8 +68,9 @@ const auth = {
             console.log(err.response)
             localStorage.removeItem('token')
             delete Axios.defaults.headers.common['Authorization']
+            reject()
           })
-          
+
         resolve()
       })
     }
