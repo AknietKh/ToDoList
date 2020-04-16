@@ -47,7 +47,20 @@ export default {
             console.log(resp.status);
           })
           .then( data => {
-            this.$store.dispatch('getNotCompletedTodos')
+            const filterStatus = this.$store.getters.status
+          
+            switch (filterStatus) {
+              case 'Неисполненные':
+                this.$store.dispatch('getNotCompletedTodos')
+                break
+              case 'Исполненные':
+                this.$store.dispatch('getCompletedTodos')
+                break
+              case 'Все':
+                this.$store.dispatch('getAllTodos')
+                break
+            }
+            // this.$store.dispatch('getNotCompletedTodos')
           })
           .then(function () {
             const alert = {
@@ -73,7 +86,20 @@ export default {
             console.log(resp);
           })
           .then( data => {
-            this.$store.dispatch('getNotCompletedTodos')
+            const filterStatus = this.$store.getters.status
+          
+            switch (filterStatus) {
+              case 'Неисполненные':
+                this.$store.dispatch('getNotCompletedTodos')
+                break
+              case 'Исполненные':
+                this.$store.dispatch('getCompletedTodos')
+                break
+              case 'Все':
+                this.$store.dispatch('getAllTodos')
+                break
+            }
+            // this.$store.dispatch('getNotCompletedTodos')
           })
           .then(function () {
             const alert = {

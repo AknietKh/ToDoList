@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from './modules/auth'
 import todos from './modules/todos'
 import modal from './modules/modal'
+import filter from './modules/fliter'
 import alert from './modules/alert'
 
 Vue.use(Vuex)
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     auth,
     todos,
     modal,
+    filter,
     alert
   },
   strict: debug

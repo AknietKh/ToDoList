@@ -97,9 +97,9 @@ export default {
                 urgency: this.isChecked
               }
             })
-            .then(() => {
-              this.$store.dispatch('getNotCompletedTodos')
-            })
+            //.then(() => {
+            //  this.$store.dispatch('getNotCompletedTodos')
+            //})
             .catch(err => {
               const errMessage = err.response.data.message
               console.log(errMessage);
@@ -107,7 +107,20 @@ export default {
           }
         })
         .then(() => {
-          this.$store.dispatch('getNotCompletedTodos')
+          const filterStatus = this.$store.getters.status
+          
+          switch (filterStatus) {
+            case 'Неисполненные':
+              this.$store.dispatch('getNotCompletedTodos')
+              break
+            case 'Исполненные':
+              this.$store.dispatch('getCompletedTodos')
+              break
+            case 'Все':
+              this.$store.dispatch('getAllTodos')
+              break
+          }
+          //this.$store.dispatch('getNotCompletedTodos')
         })
         .then(function () {
           const alert = {
