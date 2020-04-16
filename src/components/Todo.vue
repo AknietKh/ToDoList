@@ -43,7 +43,7 @@ export default {
       this.$store.commit('CHANGE_MODAL_TYPE', { type: 'addSubTodo', task: { todo: this.todo} })
     },
     onShowRedactTodoModal: function () {
-      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'redactTodo' })
+      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'redactTodo', task: { todo: this.todo} })
     },
     onShowDeleteTaskModal: function () {
       const payload = { 
