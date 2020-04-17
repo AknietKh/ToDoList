@@ -12,11 +12,14 @@
       </div>
     </div>
     <div class="todo-list__main">
-      <Todo
-        v-for="todo in getTodos"
-        v-bind:key='todo.id'
-        v-bind:todo="todo"
-      />
+      <div v-if='getTodos.length'>
+        <Todo
+          v-for="todo in getTodos"
+          v-bind:key='todo.id'
+          v-bind:todo="todo"
+        />
+      </div>
+      <Empty stule='height: 100%' v-else/>
     </div>
     <AddTodoModal v-if='getModalType === "addTodo"'/>
     <AddSubTodoModal v-if='getModalType === "addSubTodo"'/>
@@ -27,6 +30,7 @@
 </template>
 
 <script>
+import Empty from '../components/Empty'
 import Todo from '../components/Todo.vue'
 import AddTodoModal from '../components/modals/addTodoModal.vue'
 import AddSubTodoModal from '../components/modals/addSubTodoModal.vue'
@@ -70,6 +74,7 @@ export default {
   },
   components: {
     Todo,
+    Empty,
     AddTodoModal,
     AddSubTodoModal,
     RedactTodoModal,
@@ -82,6 +87,8 @@ export default {
 
 <style lang="scss">
   .todo-list {
+    box-sizing: border-box;
+    padding-bottom: 2rem;
     &-wrapper {
       box-sizing: border-box;
       width: 90%;

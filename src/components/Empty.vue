@@ -1,8 +1,8 @@
 <template>
-  <div class="empty-wrapper">
+  <div class="empty-wrapper" @click='onShowAddTodoModal'>
     <div class="empty-text">Задачи отсутсвуют. Нажмите, чтобы добавить...</div>
     <div class="empty-plus" @click='onShowAddTodoModal'>+</div>
-    <AddTodoModal v-if='isShowModal' />
+    <AddTodoModal v-if='getModalType === "addTodo"'/>
   </div>
 </template>
 
@@ -11,17 +11,17 @@ import AddTodoModal from './modals/addTodoModal'
 
 export default {
   name: 'Empty',
-  data: function () {
-    return {
-      isShowModal: false
-    }
-  },
   components: {
     AddTodoModal
   },
+  computed: {
+    getModalType () {
+      return this.$store.getters.modalType
+    }
+  },
   methods: {
     onShowAddTodoModal () {
-      this.isShowModal = true
+      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'addTodo' })
     }
   }
 }
@@ -30,14 +30,17 @@ export default {
 <style lang="scss">
  .empty {
     &-wrapper {
-      height: 10rem;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      cursor: pointer;
     }
 
     &-text {
+      margin-bottom: 3rem;
       font-family: Montserrat;
       font-style: normal;
       font-weight: normal;
@@ -55,6 +58,7 @@ export default {
       height: 2.4rem;
       border: 1px solid black;
       border-radius: 50%;
+      cursor: pointer;
     }
  }
 </style>
