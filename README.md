@@ -1,6 +1,6 @@
 # todo-list
 
-## Решение ледит в ветке test
+## Решение лежит в ветке test
 
 ## Project setup
 ```
