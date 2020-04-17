@@ -61,6 +61,7 @@ export default {
       }
       const task = this.$store.getters.getTask
       const subTodoId = task.subTodo.id
+      const taskName = this.$store.getters.taskName
       this.$store.commit('CHANGE_MODAL_TYPE', '')
 
       // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
@@ -94,12 +95,12 @@ export default {
         })
         .then(resp => {
           console.log('redact',task)
+          console.log('redact',taskName)
 
-          
           const alert = {
             id: Date.now(),
             status: true,
-            text: `Подзадача "${this.name}" из задачи "${task.subTodo.name_list}" успешно изменена`
+            text: `Подзадача "${taskName.subTodoName}" из задачи "${taskName.todoName}" успешно изменена`
           }
           this.$store.commit('ADD_ALERT', alert)
           return resp

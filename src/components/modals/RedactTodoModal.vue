@@ -94,10 +94,13 @@ export default {
           return resp
         })
         .then(resp => {
+          //Блок отвечает за отправки мутации добавления алерта о редактировании
+          console.log('redact',task);
+          //task.todo.name - старое название задачи. Что бы в уведомлении показывалось старое название редактированной задачи
           const alert = {
             id: Date.now(),
             status: true,
-            text: `Задача "${this.name}" успешно изменена`
+            text: `Задача "${task.todo.name}" успешно изменена`
           }
           this.$store.commit('ADD_ALERT', alert)
           return resp

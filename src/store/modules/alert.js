@@ -26,7 +26,7 @@ const alert = {
       console.log('dismissed', alert)
       setTimeout(function () {
         commit('CHANGE_ALERT_STATUS', alert)
-      }, 1500)
+      }, 4000)
     }
   },
   getters: {

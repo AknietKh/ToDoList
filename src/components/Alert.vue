@@ -18,13 +18,14 @@ export default {
 
 <style lang="scss">
   .app-alert{
-    position: absolute;
-    top: 10rem;
-    right: 3rem;
+    // position: absolute;
+    // top: 10rem;
+    // right: 3rem;
     box-sizing: border-box;
     width: 42.7rem;
     height: auto;
     padding: 1.5rem;
+    margin-bottom: 1rem;
     background: #FFFFFF;
     border: 1px solid #000000;
     border-radius: 2.4rem;
