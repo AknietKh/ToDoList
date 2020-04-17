@@ -73,7 +73,20 @@ export default {
           return resp
         })
         .then((resp) => {
-          this.$store.dispatch('getNotCompletedTodos')
+          const filterStatus = this.$store.getters.status
+          
+          switch (filterStatus) {
+            case 'Неисполненные':
+              this.$store.dispatch('getNotCompletedTodos')
+              break
+            case 'Исполненные':
+              this.$store.dispatch('getCompletedTodos')
+              break
+            case 'Все':
+              this.$store.dispatch('getAllTodos')
+              break
+          }
+          // this.$store.dispatch('getNotCompletedTodos')
           return resp
         })
         .catch(err => {

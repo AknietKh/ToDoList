@@ -62,7 +62,7 @@ export default {
 
       this.$store.commit('CHANGE_MODAL_TYPE', '')
       // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-      /*axios({
+      axios({
         method: 'post',
         url: `http://31.211.50.217/api/create-list`,
         data: {
@@ -99,7 +99,7 @@ export default {
         .catch(err => {
           const errMessage = err.response.data.message
           console.log(errMessage)
-        })*/
+        })
     }
   }
 }

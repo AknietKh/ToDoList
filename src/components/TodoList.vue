@@ -41,17 +41,17 @@ export default {
       switch (e.target.value) {
         case 'Неисполненные':
           console.dir(e.target.value)
-          this.$sotre.commit('CHANGE_FILTER_STATUS', e.target.value)
+          this.$store.commit('CHANGE_FILTER_STATUS', e.target.value)
           this.$store.dispatch('getNotCompletedTodos')
           break
         case 'Исполненные':
           console.dir(e.target.value)
-          this.$sotre.commit('CHANGE_FILTER_STATUS', e.target.value)
+          this.$store.commit('CHANGE_FILTER_STATUS', e.target.value)
           this.$store.dispatch('getCompletedTodos')
           break
         case 'Все':
           console.dir(e.target.value)
-          this.$sotre.commit('CHANGE_FILTER_STATUS', e.target.value)
+          this.$store.commit('CHANGE_FILTER_STATUS', e.target.value)
           this.$store.dispatch('getAllTodos')
           break
       }

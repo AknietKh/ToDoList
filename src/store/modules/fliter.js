@@ -1,6 +1,6 @@
 const filter = {
   state: {
-    status: ''
+    status: 'Неисполненные'
   },
   mutations: {
     CHANGE_FILTER_STATUS (state, status) {

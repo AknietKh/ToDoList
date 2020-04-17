@@ -33,7 +33,7 @@ export default {
     },
     onDelete() {
       const task = this.$store.getters.getTask
-      // console.log('task: ', task)
+      console.log('task: ', task)
       if (task.task_list_id) {
         console.log('subTodo: ', task.id);
         console.log(task.task_list_id);
@@ -85,8 +85,9 @@ export default {
           .then(resp => {
             console.log(resp);
           })
-          .then( data => {
+          .then( resp => {
             const filterStatus = this.$store.getters.status
+            console.log('filterStatus: ', filterStatus);
           
             switch (filterStatus) {
               case 'Неисполненные':
@@ -110,7 +111,7 @@ export default {
             this.$store.commit('ADD_ALERT', alert)
           })
           .catch(err => {
-            const errMessage = err.response.data.message
+            const errMessage = err.response
             console.log(errMessage);
             console.log(err.response.data)
           })
