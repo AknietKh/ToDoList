@@ -70,7 +70,7 @@ export default {
             const alert = {
               id: Date.now(),
               status: true,
-              text: `Подзадача "${taskName.todoName}" из "${taskName.subTodoName}" успешно удалена`
+              text: `Подзадача "${taskName.subTodoName}" из "${taskName.todoName}" успешно удалена`
             }
             this.$store.commit('ADD_ALERT', alert)
             return resp
