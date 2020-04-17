@@ -75,7 +75,7 @@ export default {
         .then(resp => {
           console.log(resp)
         })
-        .then(() => {
+        .then(resp => {
           const filterStatus = this.$store.getters.status
           
           switch (filterStatus) {
@@ -90,17 +90,22 @@ export default {
               break
           }
           //this.$store.dispatch('getNotCompletedTodos')
+          return resp
         })
-        .then(function () {
+        .then(resp => {
+          console.log('redact',task)
+
+          
           const alert = {
             id: Date.now(),
             status: true,
-            text: `Подзадача "${this.name}" из задачи "${task.subTodo.name}" успешно изменена`
+            text: `Подзадача "${this.name}" из задачи "${task.subTodo.name_list}" успешно изменена`
           }
           this.$store.commit('ADD_ALERT', alert)
+          return resp
         })
         .catch(err => {
-          const errMessage = err.response.data.message
+          const errMessage = err.response
           console.log(errMessage)
         })
     }

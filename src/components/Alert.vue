@@ -1,5 +1,5 @@
 <template>
-  <div class="app-alert" v-if='alert.status'>
+  <div class="app-alert">
     <span>{{alert.text}}</span>
   </div>
 </template>
@@ -7,19 +7,27 @@
 <script>
 export default {
   name: 'Alert',
-  prop: ['alert'],
+  props: ['alert'],
   mounted: function () {
-    this.$store.dispatch('dismissed', alert)
+    console.log(this.alert)
+    // this.$store.dispatch('getCompletedTodos')
+    this.$store.dispatch('dismissed', this.alert)
   }
 }
 </script>
 
 <style lang="scss">
   .app-alert{
+    position: absolute;
+    top: 10rem;
+    right: 3rem;
     box-sizing: border-box;
     width: 42.7rem;
     height: auto;
     padding: 1.5rem;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 2.4rem;
     font-family: Montserrat;
     font-style: normal;
     font-weight: normal;

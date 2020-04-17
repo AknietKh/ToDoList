@@ -71,8 +71,9 @@ export default {
       })
         .then(resp => {
           console.log(resp.status)
+          return resp
         })
-        .then(() => {
+        .then((resp) => {
           const filterStatus = this.$store.getters.status
           
           switch (filterStatus) {
@@ -87,17 +88,20 @@ export default {
               break
           }
           //this.$store.dispatch('getNotCompletedTodos')
+          return resp
         })
-        .then(function () {
+        .then((resp) => {
           const alert = {
             id: Date.now(),
             status: true,
             text: `Задача "${this.name}" успешно создана`
           }
+          // console.log("AddModal ALert", alert);
           this.$store.commit('ADD_ALERT', alert)
+          return resp
         })
         .catch(err => {
-          const errMessage = err.response.data.message
+          const errMessage = err
           console.log(errMessage)
         })
     }

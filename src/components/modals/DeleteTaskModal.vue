@@ -33,6 +33,8 @@ export default {
     },
     onDelete() {
       const task = this.$store.getters.getTask
+      const taskName = this.$store.getters.taskName
+
       console.log('task: ', task)
       if (task.task_list_id) {
         console.log('subTodo: ', task.id);
@@ -46,7 +48,7 @@ export default {
           .then(resp => {
             console.log(resp.status);
           })
-          .then( data => {
+          .then(resp => {
             const filterStatus = this.$store.getters.status
           
             switch (filterStatus) {
@@ -61,17 +63,20 @@ export default {
                 break
             }
             // this.$store.dispatch('getNotCompletedTodos')
+            return resp
           })
-          .then(function () {
+          .then(resp => {
+            console.log('delete', taskName)
             const alert = {
               id: Date.now(),
               status: true,
-              text: `Подзадача "${taskName().subTodoName}" из "${taskName().todoName}" успешно удалена`
+              text: `Подзадача "${taskName.todoName}" из "${taskName.subTodoName}" успешно удалена`
             }
             this.$store.commit('ADD_ALERT', alert)
+            return resp
           })
           .catch(err => {
-            const errMessage = err.response.data.message
+            const errMessage = err.response
             console.log(errMessage);
           })
       } else {
@@ -84,8 +89,9 @@ export default {
         })
           .then(resp => {
             console.log(resp);
+            return resp
           })
-          .then( resp => {
+          .then(resp => {
             const filterStatus = this.$store.getters.status
             console.log('filterStatus: ', filterStatus);
           
@@ -101,19 +107,23 @@ export default {
                 break
             }
             // this.$store.dispatch('getNotCompletedTodos')
+            return resp
           })
-          .then(function () {
+          .then(resp => {
+            // console.log('delete')
+            // console.log(task.name);
             const alert = {
               id: Date.now(),
               status: true,
-              text: `Задача "${taskName().todoName}" успешно удалена`
+              text: `Задача "${task.name}" успешно удалена`
             }
+            console.log('delete', alert)
             this.$store.commit('ADD_ALERT', alert)
+            return resp
           })
           .catch(err => {
             const errMessage = err.response
             console.log(errMessage);
-            console.log(err.response.data)
           })
         
       }

@@ -19,11 +19,13 @@
       <Empty/>
     </div>
   </div>
-  <Alert 
-    v-for='alert in getAlerts'
-    v-bind:key='alert.id'
-    v-bind:alert="alert"
+  <div v-for='alert in getAlerts' v-bind:key='alert.id'>
+    <Alert 
+    v-if='alert.status'
+    v-bind:alert='alert'
   />
+  </div>
+  
   </div>
 </template>
 
@@ -69,6 +71,7 @@ export default {
       return this.$store.getters.getUser
     },
     getAlerts () {
+      console.log('Alerts: ', this.$store.getters.getAlerts);
       return this.$store.getters.getAlerts
     }
   }
