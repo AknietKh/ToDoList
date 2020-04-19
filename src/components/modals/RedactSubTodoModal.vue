@@ -1,20 +1,41 @@
 <template>
-  <div class="modal">
-    <div class="modal__header">Изменить название подзадачи</div>
-    <div class="modal__main">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        Изменить название подзадачи
+        <div class="modal-close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="modal__main">
         <label class='modal-field'>
           <span>Новое название:</span>
-          <input type="text" class="modal-field__input" v-model='name'>
+          <input 
+            type="text"
+            class="modal-field__input"
+            v-model.trim='name'
+            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+          >
+          <div
+            class="validation-message validation-message_modal "
+            v-if="$v.name.$dirty && !$v.name.required">
+            Введите название подзадачи
+          </div>
+          <div
+            class="validation-message validation-message_modal"
+            v-else-if="$v.name.$dirty && !$v.name.maxLength">
+            Количество символов должно быть не более 255
+          </div>
         </label>
-    </div>
-    <div class="modal__footer">
-      <button class="app-button" @click='onRedactSubTodo'>Сохранить</button>
+      </div>
+      <div class="modal__footer">
+        <button class="app-button" @click='onRedactSubTodo'>Сохранить</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'RedactSubTodoModal',
@@ -23,10 +44,24 @@ export default {
       name: ''
     }
   },
+  validations: {
+    name: { 
+      required,
+      maxLength: maxLength(255)
+    }
+  },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onRedactSubTodo () {
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
       const task = this.$store.getters.getTask
       const subTodoId = task.subTodo.id
+      const taskName = this.$store.getters.taskName
       this.$store.commit('CHANGE_MODAL_TYPE', '')
 
       // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
@@ -41,19 +76,37 @@ export default {
         .then(resp => {
           console.log(resp)
         })
-        .then(() => {
-          this.$store.dispatch('getNotCompletedTodos')
+        .then(resp => {
+          const filterStatus = this.$store.getters.status
+          
+          switch (filterStatus) {
+            case 'Неисполненные':
+              this.$store.dispatch('getNotCompletedTodos')
+              break
+            case 'Исполненные':
+              this.$store.dispatch('getCompletedTodos')
+              break
+            case 'Все':
+              this.$store.dispatch('getAllTodos')
+              break
+          }
+          //this.$store.dispatch('getNotCompletedTodos')
+          return resp
         })
-        .then(function () {
+        .then(resp => {
+          console.log('redact',task)
+          console.log('redact',taskName)
+
           const alert = {
             id: Date.now(),
             status: true,
-            text: `Подзадача "${this.name}" из задачи "${task.subTodo.name}" успешно изменена`
+            text: `Подзадача "${taskName.subTodoName}" из задачи "${taskName.todoName}" успешно изменена`
           }
           this.$store.commit('ADD_ALERT', alert)
+          return resp
         })
         .catch(err => {
-          const errMessage = err.response.data.message
+          const errMessage = err.response
           console.log(errMessage)
         })
     }

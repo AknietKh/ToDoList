@@ -11,25 +11,32 @@
       </button>
       </div>
     </header>
-  <div class="task-manager-content">
-    <div class="todo-list" v-if='getTodos.length'>
+  <div 
+    class="task-manager-content" 
+    :class="{'_content-hidden': this.$store.getters.modalType}">
+    <div class="todo-list">
       <TodoList/>
     </div>
-    <div class="empty" v-else>
-      <Empty/>
+  </div>
+  <div class='app-alert-wrapper'>
+    <div
+      v-for='alert in getAlerts'
+      v-bind:key='alert.id'>
+      
+      <Alert 
+        v-if='alert.status'
+        v-bind:alert='alert'
+      />
+
     </div>
   </div>
-  <Alert 
-    v-for='alert in getAlerts'
-    v-bind:key='alert.id'
-    v-bind:alert="alert"
-  />
+  
+  
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import Empty from '../components/Empty'
 import TodoList from '../components/TodoList'
 import Alert from '../components/Alert'
 
@@ -41,7 +48,6 @@ export default {
     }
   },
   components: {
-    Empty,
     TodoList, 
     Alert
   },
@@ -55,11 +61,7 @@ export default {
         .then(() => {
           this.$router.push('/')
         })
-    },
-    // onShowAlert (title) {
-    //   this.isShowAlert = !this.isShowAlert;
-    //   this.alertTitle = title
-    // }
+    }
   },
   computed: {
     getTodos () {
@@ -69,6 +71,7 @@ export default {
       return this.$store.getters.getUser
     },
     getAlerts () {
+      console.log('Alerts: ', this.$store.getters.getAlerts);
       return this.$store.getters.getAlerts
     }
   }
@@ -86,7 +89,7 @@ export default {
   .task-manager{
     &-header {
       box-sizing: border-box;
-      height: 12.9rem;
+      min-height: 12.9rem;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -127,5 +130,17 @@ export default {
     align-items: center;
     justify-content: flex-start;
     background-color: $pink;
+  }
+
+  .app-alert-wrapper {
+    position: absolute;
+    top: 10rem;
+    right: 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  ._content-hidden {
+    overflow: hidden;
   }
 </style>

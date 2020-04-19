@@ -1,20 +1,41 @@
 <template>
-  <div class="modal">
-    <div class="modal__header">Изменить название задачи</div>
-    <div class="modal__main">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        Изменить название задачи
+        <div class="modal-close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="modal__main">
         <label class='modal-field'>
           <span>Новое название:</span>
-          <input type="text" class="modal-field__input" v-model='name'>
+          <input 
+            type="text"
+            class="modal-field__input"
+            v-model.trim='name'
+            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+          >
+          <div
+            class="validation-message validation-message_modal "
+            v-if="$v.name.$dirty && !$v.name.required">
+            Заполните поле "Название задачи"
+          </div>
+          <div
+            class="validation-message validation-message_modal"
+            v-else-if="$v.name.$dirty && !$v.name.maxLength">
+            Количество символов должно быть не более 255
+          </div>
         </label>
-    </div>
-    <div class="modal__footer">
-      <button class="app-button" @click='onRedactTodo'>Сохранить</button>
+      </div>
+      <div class="modal__footer">
+        <button class="app-button" @click='onRedactTodo'>Сохранить</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'RedactTodoModal',
@@ -23,8 +44,21 @@ export default {
       name: ''
     }
   },
+   validations: {
+    name: { 
+      required,
+      maxLength: maxLength(255)
+    }
+  },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onRedactTodo () {
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
       const task = this.$store.getters.getTask;
       const todoId = task.todo.id
       console.log(task)
@@ -42,19 +76,37 @@ export default {
         .then(resp => {
           console.log(resp);
         })
-        .then(() => {
-          this.$store.dispatch('getNotCompletedTodos')
+        .then(resp => {
+          const filterStatus = this.$store.getters.status
+          
+          switch (filterStatus) {
+            case 'Неисполненные':
+              this.$store.dispatch('getNotCompletedTodos')
+              break
+            case 'Исполненные':
+              this.$store.dispatch('getCompletedTodos')
+              break
+            case 'Все':
+              this.$store.dispatch('getAllTodos')
+              break
+          }
+          //this.$store.dispatch('getNotCompletedTodos')
+          return resp
         })
-        .then(function () {
+        .then(resp => {
+          //Блок отвечает за отправки мутации добавления алерта о редактировании
+          console.log('redact',task);
+          //task.todo.name - старое название задачи. Что бы в уведомлении показывалось старое название редактированной задачи
           const alert = {
             id: Date.now(),
             status: true,
-            text: `Задача "${this.name}" успешно изменена`
+            text: `Задача "${task.todo.name}" успешно изменена`
           }
           this.$store.commit('ADD_ALERT', alert)
+          return resp
         })
         .catch(err => {
-          const errMessage = err.response.data.message
+          const errMessage = err.response
           console.log(errMessage);
         })
     }

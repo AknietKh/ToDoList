@@ -1,12 +1,15 @@
 <template>
-  <div class="delete-modal">
-    <div class="delete-modal__text">
-      <span v-if='taskName.subTodoName'>Вы действительно хотите удалить “{{taskName.subTodoName}}" из задачи “{{taskName.todoName}}”?</span>
-      <span v-else>Вы точно хотите удалить "{{taskName.todoName}}" ?</span>
-    </div>
-    <div class="delete-modal__btns">
-      <button class="app-button app-button_small _btn-green" @click="onDelete" >Да</button>
-      <button class="app-button app-button_small _btn-red" @click="onCancel">Нет</button>  
+  <div class="modal-wrapper">
+    <div class="delete-modal">
+      <div class="delete-modal__text">
+        <span v-if='taskName.subTodoName'>Вы действительно хотите удалить “{{taskName.subTodoName}}" из задачи “{{taskName.todoName}}”?</span>
+        <span v-else>Вы точно хотите удалить "{{taskName.todoName}}" ?</span>
+        <div class="delete-modal__close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="delete-modal__btns">
+        <button class="app-button app-button_small _btn-green" @click="onDelete" >Да</button>
+        <button class="app-button app-button_small _btn-red" @click="onCancel">Нет</button>  
+      </div>
     </div>
   </div>
 </template>
@@ -25,9 +28,14 @@ export default {
     }
   },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onDelete() {
       const task = this.$store.getters.getTask
-      // console.log('task: ', task)
+      const taskName = this.$store.getters.taskName
+
+      console.log('task: ', task)
       if (task.task_list_id) {
         console.log('subTodo: ', task.id);
         console.log(task.task_list_id);
@@ -40,19 +48,35 @@ export default {
           .then(resp => {
             console.log(resp.status);
           })
-          .then( data => {
-            this.$store.dispatch('getNotCompletedTodos')
+          .then(resp => {
+            const filterStatus = this.$store.getters.status
+          
+            switch (filterStatus) {
+              case 'Неисполненные':
+                this.$store.dispatch('getNotCompletedTodos')
+                break
+              case 'Исполненные':
+                this.$store.dispatch('getCompletedTodos')
+                break
+              case 'Все':
+                this.$store.dispatch('getAllTodos')
+                break
+            }
+            // this.$store.dispatch('getNotCompletedTodos')
+            return resp
           })
-          .then(function () {
+          .then(resp => {
+            console.log('delete', taskName)
             const alert = {
               id: Date.now(),
               status: true,
-              text: `Подзадача "${taskName().subTodoName}" из "${taskName().todoName}" успешно удалена`
+              text: `Подзадача "${taskName.subTodoName}" из "${taskName.todoName}" успешно удалена`
             }
             this.$store.commit('ADD_ALERT', alert)
+            return resp
           })
           .catch(err => {
-            const errMessage = err.response.data.message
+            const errMessage = err.response
             console.log(errMessage);
           })
       } else {
@@ -65,22 +89,41 @@ export default {
         })
           .then(resp => {
             console.log(resp);
+            return resp
           })
-          .then( data => {
-            this.$store.dispatch('getNotCompletedTodos')
+          .then(resp => {
+            const filterStatus = this.$store.getters.status
+            console.log('filterStatus: ', filterStatus);
+          
+            switch (filterStatus) {
+              case 'Неисполненные':
+                this.$store.dispatch('getNotCompletedTodos')
+                break
+              case 'Исполненные':
+                this.$store.dispatch('getCompletedTodos')
+                break
+              case 'Все':
+                this.$store.dispatch('getAllTodos')
+                break
+            }
+            // this.$store.dispatch('getNotCompletedTodos')
+            return resp
           })
-          .then(function () {
+          .then(resp => {
+            // console.log('delete')
+            // console.log(task.name);
             const alert = {
               id: Date.now(),
               status: true,
-              text: `Задача "${taskName().todoName}" успешно удалена`
+              text: `Задача "${task.name}" успешно удалена`
             }
+            console.log('delete', alert)
             this.$store.commit('ADD_ALERT', alert)
+            return resp
           })
           .catch(err => {
-            const errMessage = err.response.data.message
+            const errMessage = err.response
             console.log(errMessage);
-            console.log(err.response.data)
           })
         
       }
@@ -117,6 +160,18 @@ export default {
     text-align: center;
     letter-spacing: 0.09em;
     color: #000000;
+
+    &__text {
+      position: relative;
+    }
+
+    &__close {
+      position: absolute;
+      top: -4rem;
+      right: -3rem;
+      font-size: 4rem;
+      cursor: pointer;
+    }
 
     &__btns {
       display: flex;

@@ -1,10 +1,29 @@
 <template>
-  <div class="modal">
-    <div class="modal__header">Новая подзадача</div>
-    <div class="modal__main">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        Новая подзадача
+        <div class="modal-close" @click='onCloseModal'>&times;</div>
+      </div>
+      <div class="modal__main">
         <label class='modal-field'>
           <span>Название подзадачи:</span>
-          <input type="text" class="modal-field__input" v-model='name'>
+          <input 
+            type="text"
+            class="modal-field__input"
+            v-model.trim='name'
+            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+          >
+          <div
+            class="validation-message validation-message_modal "
+            v-if="$v.name.$dirty && !$v.name.required">
+            Введите название подзадачи
+          </div>
+          <div
+            class="validation-message validation-message_modal"
+            v-else-if="$v.name.$dirty && !$v.name.maxLength">
+            Количество символов должно быть не более 255
+          </div>
         </label>
 
         <label class="modal-field_check">
@@ -15,15 +34,17 @@
           >
           <span>срочная задача</span>
         </label>
-    </div>
-    <div class="modal__footer">
-      <button class="app-button" @click='onCreateSubTodo'>Создать</button>
+      </div>
+      <div class="modal__footer">
+        <button class="app-button" @click='onCreateSubTodo'>Создать</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddSubTodoModal',
@@ -33,8 +54,22 @@ export default {
       isChecked: false
     }
   },
+  validations: {
+    name: { 
+      required,
+      maxLength: maxLength(255)
+    }
+  },
   methods: {
+    onCloseModal () {
+      this.$store.commit('CHANGE_MODAL_TYPE', '')
+    },
     onCreateSubTodo () {
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
       const task = this.$store.getters.getTask;
       const todoId = task.todo.id
 
@@ -62,25 +97,40 @@ export default {
                 urgency: this.isChecked
               }
             })
-            .then(() => {
-              this.$store.dispatch('getNotCompletedTodos')
-            })
+            //.then(() => {
+            //  this.$store.dispatch('getNotCompletedTodos')
+            //})
             .catch(err => {
               const errMessage = err.response.data.message
               console.log(errMessage);
             })
           }
         })
-        .then(() => {
-          this.$store.dispatch('getNotCompletedTodos')
+        .then(resp => {
+          const filterStatus = this.$store.getters.status
+          
+          switch (filterStatus) {
+            case 'Неисполненные':
+              this.$store.dispatch('getNotCompletedTodos')
+              break
+            case 'Исполненные':
+              this.$store.dispatch('getCompletedTodos')
+              break
+            case 'Все':
+              this.$store.dispatch('getAllTodos')
+              break
+          }
+          //this.$store.dispatch('getNotCompletedTodos')
+          return resp
         })
-        .then(function () {
+        .then(resp => {
           const alert = {
             id: Date.now(),
             status: true,
             text: `Подзадача "${this.name}" успешно добавлена в задачу "${task.todo.name}"`
           }
           this.$store.commit('ADD_ALERT', alert)
+          return resp
         })
         .catch(err => {
           const errMessage = err.response

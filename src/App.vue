@@ -126,7 +126,8 @@ body {
 }
 
 .invalid {
-  border: 2px solid #ff6f60;
+  // border: 2px solid #ff6f60;
+  background: rgba(235, 165, 169, 0.6);
 }
 
 .validation-message {
@@ -141,6 +142,13 @@ body {
   line-height: 1.4rem;
   color: #1D1D1D;
   text-align: center;
+
+  &_modal {
+    box-sizing: border-box;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+    align-self: center;
+  }
 }
 
   @media only screen and (min-width: 1500px) {

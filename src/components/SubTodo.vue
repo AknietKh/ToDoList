@@ -13,7 +13,7 @@
         <div class="sub-todo__urgency" v-if='subTodo.urgency'></div>
     </div>
     <div class="sub-todo__right-bar"> 
-        <span class="sub-todo__text">{{subTodo.created_at}}</span>
+        <span class="sub-todo__text">{{subTodo.created_at | datetime}}</span>
         <div class="btn-wrapper">
           <div class="todo-icon todo-redact" @click='onShowSubRedactTodoModal'></div>
           <div class="todo-icon" @click="onShowDeleteTaskModal">&times;</div>
@@ -33,9 +33,29 @@ export default {
     }
   },
   props: ['subTodo', 'todo'],
+  filters: {
+    datetime: function (value) {
+      if (!value) return ''
+      const reg = /\d+/g;
+      value = value.toString()      
+      value = value.match(reg)
+      return `${value[2]}.${value[1]}.${value[0]} ${value[3]}:${value[4]}:${value[5]}`
+      // console.log(str[2]+"-"+str[1]+"-"+str[0]+" "+str[3]+":"+str[4]+":"+str[5])
+    }
+  },
   methods: {
     onShowSubRedactTodoModal () {
-      this.$store.commit('CHANGE_MODAL_TYPE', { type: 'redactSubTodo', task: { subTodo: this.subTodo} })
+      const payload = {
+        type: 'redactSubTodo',
+        taskName: {
+          todoName: this.todo.name,
+          subTodoName: this.subTodo.name_list
+        },
+        task: {
+          subTodo: this.subTodo
+        }
+      }
+      this.$store.commit('CHANGE_MODAL_TYPE', payload)
     },
     onShowDeleteTaskModal () {
       const payload = {
@@ -63,7 +83,20 @@ export default {
           return resp
         })
         .then((resp) => {
-          this.$store.dispatch('getNotCompletedTodos')
+          const filterStatus = this.$store.getters.status
+          
+          switch (filterStatus) {
+            case 'Неисполненные':
+              this.$store.dispatch('getNotCompletedTodos')
+              break
+            case 'Исполненные':
+              this.$store.dispatch('getCompletedTodos')
+              break
+            case 'Все':
+              this.$store.dispatch('getAllTodos')
+              break
+          }
+          // this.$store.dispatch('getNotCompletedTodos')
           return resp
         })
         .catch(err => {
